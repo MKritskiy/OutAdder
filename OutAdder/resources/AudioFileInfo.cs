@@ -12,26 +12,52 @@ using System.Windows.Shapes;
 
 namespace OutAdder.resources
 {
-    class AudioFileInfo
+    class AudioFileInfo : NAudio.Wave.AudioFileReader
     {
-        string Name;
-        ImageSource FileIcon;
-        public string Duration { get; set; }
-        public AudioFileInfo()
+        /// <summary>
+        /// Имя файла
+        /// </summary>
+        string ?Name;
+
+        ///<summary>
+        ///Иконка файла
+        ///</summary>
+        ImageSource ?FileIcon;
+
+        ///<summary> 
+        ///Продолжительность аудиофайла
+        ///</summary>
+        public string ?Duration { get; set; }
+
+        ///<summary> 
+        ///Конструктор
+        ///</summary>
+        public AudioFileInfo(string AudioFileName) : base(AudioFileName)
         {
-            Name = "";
-            SetIcon("default.mp3", false);
+            SetName(AudioFileName);
+            SetIcon(AudioFileName, false);
+            SetDuration(this.TotalTime);
         }
+
+        ///<summary> 
+        ///Получить имя файла
+        ///</summary> 
         public string GetName()
         {
             return Name;
         }
+
+        ///<summary>
+        ///Установить имя файла находящегося в path
+        ///</summary>
         public void SetName(string path)
         {
             Name = path.Split('\\').Last();
         }
 
-        
+        ///<summary>
+        ///Изменить текущую иконку
+        ///</summary>
         public void SetIcon(string strPath, bool bSmall)
         {
             Interop.SHFILEINFO info = new Interop.SHFILEINFO(true);
@@ -55,9 +81,22 @@ namespace OutAdder.resources
             FileIcon = img;
         }
 
+        ///<summary>
+        ///Получить текущую иконку
+        ///</summary>
         public ImageSource GetIcon()
         {
             return FileIcon;
+        }
+
+        ///<summary>
+        ///Установить продолжительность аудиофайла
+        ///из TimeSpan формата в String
+        ///</summary>
+        public void SetDuration(TimeSpan totalTime)
+        {
+            Duration = String.Format("{0:00}:{1:00}",
+                totalTime.Minutes, totalTime.Seconds /*, audioFile.TotalTime.Milliseconds*/);
         }
     }
 }

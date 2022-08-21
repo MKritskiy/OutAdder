@@ -15,4 +15,8 @@
     <Content Include="default.mp3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="NAudio" Version="2.1.0" />
+  </ItemGroup>
+
 </Project>
