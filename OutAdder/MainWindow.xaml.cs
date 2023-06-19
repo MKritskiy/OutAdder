@@ -1,24 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
-using System.Diagnostics;
 using System.Threading;
 using System.Text.RegularExpressions;
-using NAudio.CoreAudioApi;
 using NAudio.Wave;
-using NAudio.Wave.SampleProviders;
 using OutAdder.resources;
 using Microsoft.Win32;
 
@@ -155,23 +141,26 @@ namespace OutAdder
 
         private void StartEndPos_Button_Click(object sender, RoutedEventArgs e)
         {
-            TimeSpan ts;
-            string temp = "00:" + StartPos.Text;
-
-            if (TimeSpan.TryParse(temp, out ts))
-            { 
-                audioPlayer.CurrentTime = String.Format("{0:00}:{1:00}"/*:{2:00}*/,
-                    ts.Minutes, ts.Seconds/*, ts.Milliseconds / 10*/); 
-            }
-
-            ClockTxtBlock.Text = currAudioFileInfo.Duration + " / " + audioPlayer.CurrentTime;
-
-            currAudioFileInfo.CurrentTime = ts;
-            temp = "00:"+EndPos.Text;
-            if (TimeSpan.TryParse(temp, out ts))
+            if (currAudioFileInfo != null)
             {
-                audioPlayer.EndingTime = ts;
-                audioPlayer.IsEndingTimeRealised = false;
+                TimeSpan ts;
+                string temp = "00:" + StartPos.Text;
+
+                if (TimeSpan.TryParse(temp, out ts))
+                {
+                    audioPlayer.CurrentTime = String.Format("{0:00}:{1:00}"/*:{2:00}*/,
+                        ts.Minutes, ts.Seconds/*, ts.Milliseconds / 10*/);
+                }
+
+                ClockTxtBlock.Text = $"{currAudioFileInfo.Duration} / {audioPlayer.CurrentTime}";
+
+                currAudioFileInfo.CurrentTime = ts;
+                temp = "00:" + EndPos.Text;
+                if (TimeSpan.TryParse(temp, out ts))
+                {
+                    audioPlayer.EndingTime = ts;
+                    audioPlayer.IsEndingTimeRealised = false;
+                }
             }
         }
 
